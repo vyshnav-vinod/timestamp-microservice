@@ -26,6 +26,42 @@ app.get("/api/hello", function (req, res) {
 
 
 
+app.get("/api/:date?", (req, res) => {
+  date = {}
+  if(req.params.date == null){
+    date = {
+      "unix": new Date().valueOf(),
+      "utc": new Date().toUTCString()
+    }
+    res.json(date)
+  }
+  else{
+      if(new Date(parseInt(req.params.date)).toString() == "Invalid Date"){
+        res.json({
+          "error": "Invalid Date"
+        })
+      }
+      else{
+        // Checks if the given date is a unix timestamp in milliseconds
+        if(new Date(req.params.date).valueOf() == null && new Date(req.params.date).toUTCString == "Invalid Date"){
+          date = {
+            "unix": new Date(parseInt(req.params.date)).valueOf(),
+            "utc": new Date(parseInt(req.params.date)).toUTCString()
+          }
+        }
+        // Else the date is in normal utc timestamp
+        else{
+          date = {
+            "unix": new Date(req.params.date).valueOf(),
+            "utc": new Date(req.params.date).toUTCString()
+          }
+        }
+        res.json(date)
+      }
+  }
+})
+
+
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
