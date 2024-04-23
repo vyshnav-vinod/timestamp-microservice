@@ -43,7 +43,7 @@ app.get("/api/:date?", (req, res) => {
       }
       else{
         // Checks if the given date is a unix timestamp in milliseconds
-        if(new Date(req.params.date).valueOf() == null && new Date(req.params.date).toUTCString == "Invalid Date"){
+        if(isNaN(new Date(req.params.date).valueOf()) || new Date(req.params.date).toUTCString == "Invalid Date"){
           date = {
             "unix": new Date(parseInt(req.params.date)).valueOf(),
             "utc": new Date(parseInt(req.params.date)).toUTCString()
